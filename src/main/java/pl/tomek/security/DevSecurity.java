@@ -2,14 +2,15 @@ package pl.tomek.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.FilterChainProxy;
 import pl.tomek.service.UserDetailImplement;
 
 @Configuration
-public class security extends WebSecurityConfigurerAdapter {
+@Profile("dev")
+public class DevSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Bean
@@ -28,6 +29,8 @@ public class security extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/search").permitAll()
                 .antMatchers("/searchh").permitAll()
+                .antMatchers("/h2").permitAll()
+                .antMatchers("/h2/**").permitAll()
                 .antMatchers("/detailsSearch").permitAll()
                 .antMatchers("/terms").permitAll()
                 .antMatchers("/privacy").permitAll()
@@ -53,9 +56,13 @@ public class security extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logmeout")
                 .logoutSuccessUrl("/")
-                .permitAll();
+                .permitAll()
+                .and()
+                .csrf().disable()
+                .headers().frameOptions().disable();
 
         ;
 
     }
 }
+
